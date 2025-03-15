@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Submission</title>
+    <script>
+        async function submitTest() {
+            // Collecting answers
+            let answers = [
+                parseInt(document.getElementById("q1").value),
+                parseInt(document.getElementById("q2").value),
+                parseInt(document.getElementById("q3").value),
+                parseInt(document.getElementById("q4").value)
+            ];
+            
+            // Compute scores (custom logic, modify as needed)
+            let xScore = (answers[0] + answers[1]) - (answers[2] + answers[3]);
+            let yScore = (answers[0] + answers[3]) - (answers[1] + answers[2]);
+
+            // Generate random participant ID
+            let participantID = "P" + Math.floor(Math.random() * 1000000);
+
+            // Send to Google Sheets
+            let response = await fetch("https://script.google.com/macros/s/AKfycbw0ZZQ1KY-6lxmK_uoD_x_N5cIJ7jPzZZ216eLgojSkEqPxYEF36SKN64Luh-KCYEIROQ/exec", {
+                method: "POST",
+                body: JSON.stringify({
+                    participantID: participantID,
+                    xScore: xScore,
+                    yScore: yScore
+                }),
+                headers: { "Content-Type": "application/json" }
+            });
+
+            if (response.ok) {
+                alert("Test submitted successfully!");
+                document.getElementById("results").innerHTML = 
+                    `Your Scores: X = ${xScore}, Y = ${yScore}`;
+            } else {
+                alert("Submission failed. Please try again.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Personality Test</h2>
+    <label>Question 1:</label>
+    <select id="q1">
+        <option value="1">Strongly Disagree</option>
+        <option value="2">Disagree</option>
+        <option value="3">Agree</option>
+        <option value="4">Strongly Agree</option>
+    </select><br>
+
+    <label>Question 2:</label>
+    <select id="q2">
+        <option value="1">Strongly Disagree</option>
+        <option value="2">Disagree</option>
+        <option value="3">Agree</option>
+        <option value="4">Strongly Agree</option>
+    </select><br>
+
+    <label>Question 3:</label>
+    <select id="q3">
+        <option value="1">Strongly Disagree</option>
+        <option value="2">Disagree</option>
+        <option value="3">Agree</option>
+        <option value="4">Strongly Agree</option>
+    </select><br>
+
+    <label>Question 4:</label>
+    <select id="q4">
+        <option value="1">Strongly Disagree</option>
+        <option value="2">Disagree</option>
+        <option value="3">Agree</option>
+        <option value="4">Strongly Agree</option>
+    </select><br>
+
+    <button onclick="submitTest()">Submit</button>
+
+    <div id="results"></div>
+</body>
+</html>
